@@ -22,7 +22,7 @@ const BlogDetail = ({ blog }) => {
     <PageLayout className="blog-detail-page">
       <Row>
         <Col md={{ span: 10, offset: 1 }}>
-          <BlogHeader title={blog.title} subtitle={blog.subtitle} coverImage={urlFor(blog.coverImage).height(600).url()} date={moment(blog.date).format("LLL")} author={blog.author} />
+          <BlogHeader title={blog.title} subtitle={blog.subtitle} coverImage={urlFor(blog.coverImage).height(600).url()} date={moment(blog.date).format("LL")} author={blog.author} />
           <hr />
           {blog.content && <BlogContent content={blog.content} />}
         </Col>
@@ -34,7 +34,8 @@ const BlogDetail = ({ blog }) => {
 export async function getStaticProps({ params }) {
   const blog = await getBlogBySlug(params.slug)
   return {
-    props: { blog }
+    props: { blog },
+    revalidate: 1
   }
 }
 

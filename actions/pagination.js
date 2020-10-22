@@ -1,4 +1,3 @@
-import { useEffect } from "react"
 import { useSWRPages } from "swr"
 import moment from "moment"
 import { Col } from "react-bootstrap"
@@ -9,20 +8,47 @@ import CardItem from "../components/CardItem"
 import CardItemHolder from "../components/CardItemHolder"
 import CardListItemHolder from "../components/CardListItemHolder"
 
+const BlogList = ({blog, filter}) => {
+  return paginatedBlogs.map(blog =>
+    filter.view.list ? (
+      <Col key={`${blog.slug}-list`} md="10">
+        <CardListItem
+          title={blog.title}
+          subtitle={blog.subtitle}
+          date={moment(blog.date).format("LL")}
+          author={blog.author}
+          link={{
+            href: "/blogs/[slug]",
+            as: `/blogs/${blog.slug}`
+          }}
+        />
+      </Col>
+    ) : (
+      <Col key={blog.slug} md="6" lg="4">
+        <CardItem
+          title={blog.title}
+          subtitle={blog.subtitle}
+          date={moment(blog.date).format("LL")}
+          image={blog.coverImage}
+          author={blog.author}
+          link={{
+            href: "/blogs/[slug]",
+            as: `/blogs/${blog.slug}`
+          }}
+        />
+      </Col>
+    )
+}
+
 export const useGetBlogPages = ({ blogs, filter }) => {
-  useEffect(() => {
-    window.___pagination__init = true
-  }, [])
   return useSWRPages(
     "index-page",
     ({ offset, withSWR }) => {
-      let initialData = !offset && blogs
+      const { data: paginatedBlogs, error } = withSWR(useGetBlogs({ offset, filter }))
 
-      if (typeof window !== "undefined" && window.___pagination__init) {
-        initialData = null
+      if (!offset && !paginatedBlogs && !error) {
+        return <BlogList blogs={blogs} filter={filter} />
       }
-
-      const { data: paginatedBlogs } = withSWR(useGetBlogs({ offset, filter }, initialData))
 
       if (!paginatedBlogs) {
         return Array(3)
@@ -33,43 +59,15 @@ export const useGetBlogPages = ({ blogs, filter }) => {
                 <CardListItemHolder />
               </Col>
             ) : (
-              <Col key={`${i}-item`} md="4">
+              <Col key={`${i}-item`} md="6" lg="4">
                 <CardItemHolder />
               </Col>
             )
           )
       }
 
-      return paginatedBlogs.map(blog =>
-        filter.view.list ? (
-          <Col key={`${blog.slug}-list`} md="10">
-            <CardListItem
-              title={blog.title}
-              subtitle={blog.subtitle}
-              date={moment(blog.date).format("LLL")}
-              author={blog.author}
-              link={{
-                href: "/blogs/[slug]",
-                as: `/blogs/${blog.slug}`
-              }}
-            />
-          </Col>
-        ) : (
-          <Col key={blog.slug} md="4">
-            <CardItem
-              title={blog.title}
-              subtitle={blog.subtitle}
-              date={moment(blog.date).format("LLL")}
-              image={blog.coverImage}
-              author={blog.author}
-              link={{
-                href: "/blogs/[slug]",
-                as: `/blogs/${blog.slug}`
-              }}
-            />
-          </Col>
-        )
-      )
+      return <BlogList blogs={paginatedBlogs} filter={filter} />
+      
     },
     //computing offset passed into previous callback function with 'withSWR'
     //SWR: data to get from "withSWR" function, index num of current page
