@@ -8,8 +8,8 @@ import CardItem from "../components/CardItem"
 import CardItemHolder from "../components/CardItemHolder"
 import CardListItemHolder from "../components/CardListItemHolder"
 
-const BlogList = ({blog, filter}) => {
-  return paginatedBlogs.map(blog =>
+const BlogList = ({ blogs, filter }) => {
+  return blogs.map(blog =>
     filter.view.list ? (
       <Col key={`${blog.slug}-list`} md="10">
         <CardListItem
@@ -38,6 +38,7 @@ const BlogList = ({blog, filter}) => {
         />
       </Col>
     )
+  )
 }
 
 export const useGetBlogPages = ({ blogs, filter }) => {
@@ -67,7 +68,6 @@ export const useGetBlogPages = ({ blogs, filter }) => {
       }
 
       return <BlogList blogs={paginatedBlogs} filter={filter} />
-      
     },
     //computing offset passed into previous callback function with 'withSWR'
     //SWR: data to get from "withSWR" function, index num of current page
