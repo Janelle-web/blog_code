@@ -1,0 +1,28 @@
+{
+  "name": "blog-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.32",
+    "@fortawesome/free-solid-svg-icons": "^5.15.1",
+    "@fortawesome/react-fontawesome": "^0.1.11",
+    "@sanity/block-content-to-react": "^2.0.7",
+    "@sanity/client": "^1.150.7",
+    "@sanity/image-url": "^0.140.19",
+    "bootstrap": "4.5.0",
+    "highlight.js": "^10.2.1",
+    "moment": "^2.29.1",
+    "next": "9.5.3",
+    "react": "16.13.1",
+    "react-bootstrap": "1.0.1",
+    "react-dom": "16.13.1",
+    "react-toggle": "^4.1.1",
+    "sass": "^1.26.11",
+    "swr": "0.2.2"
+  }
+}

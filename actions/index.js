@@ -1,0 +1,15 @@
+import useSWR from "swr"
+
+/*export const getBlogs = url => {
+  return fetcher(url)
+}*/
+
+const fetcher = url => fetch(url).then(res => res.json())
+
+export const useGetHello = () => {
+  return useSWR("/api/hello", fetcher)
+}
+
+export const useGetBlogs = ({ offset, filter }, initialData) => {
+  return useSWR(`/api/blogs?offset=${offset || 0}&date=${filter.date.asc ? "asc" : "desc"}`, fetcher, { initialData })
+}
